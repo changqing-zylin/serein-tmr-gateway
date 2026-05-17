@@ -1,0 +1,48 @@
+version: "3.9"
+
+services:
+  gateway:
+    build: .
+    ports:
+      - "8080:8080"
+    env_file:
+      - .env
+    volumes:
+      - "./config/providers.toml:/home/serein/providers.toml"
+    environment:
+      APP_ENV: production
+      RUST_LOG: info,serein_core=debug,serein_gateway=debug
+      WORKER_THREADS: "4"
+      METRICS_PORT: "9090"
+      REDIS_URL: redis://redis:6379/0
+      DATABASE_URL: postgres://serein:serein@postgres:5432/serein
+      SEREIN_MASTER_KEY: "0000000000000000000000000000000000000000000000000000000000000000"
+      SEREIN_INTERNAL_TOKEN: "hackathon-demo-token"
+      PROVIDERS_CONFIG: providers.toml
+      SLM_EXECUTION_MODE: lazy
+      CORS_ALLOWED_ORIGINS: "*"
+      PROXY_ENABLED: "false"
+      USE_EPHEMERAL_STORAGE: "true"
+      WASI_NN_ENABLED: "false"
+    depends_on:
+      redis:
+        condition: service_started
+      postgres:
+        condition: service_started
+    restart: unless-stopped
+
+  redis:
+    image: redis:alpine
+    ports:
+      - "6379:6379"
+    restart: unless-stopped
+
+  postgres:
+    image: postgres:alpine
+    ports:
+      - "5432:5432"
+    environment:
+      POSTGRES_USER: serein
+      POSTGRES_PASSWORD: serein
+      POSTGRES_DB: serein
+    restart: unless-stopped

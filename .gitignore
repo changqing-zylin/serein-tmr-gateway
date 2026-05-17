@@ -1,0 +1,42 @@
+# ==========================================
+# 1. Security & Secrets
+# ==========================================
+.env
+.env.*
+!.env.example
+!.env.template
+*.pem
+*.key
+
+# ==========================================
+# 2. Rust / Cargo Build Artifacts
+# ==========================================
+/target
+/target-check
+**/*.rs.bk
+.env
+Cargo.lock.bk
+
+# ==========================================
+# 3. Serein Specific Assets & Runtime Data
+# ==========================================
+# Isolate large model weights to prevent Git history bloat
+/serein-models/*.gguf
+/serein-models/*.bin
+
+# Telemetry corpus and SQLite WAL/SHM files
+/serein-telemetry/*.jsonl
+*.sqlite
+*.sqlite-wal
+*.sqlite-shm
+
+# ==========================================
+# 4. OS & IDE Environments
+# ==========================================
+.DS_Store
+Thumbs.db
+.vscode/*
+!.vscode/settings.json
+!.vscode/extensions.json
+.idea/
+*.swp
