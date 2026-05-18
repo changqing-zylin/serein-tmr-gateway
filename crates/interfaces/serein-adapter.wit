@@ -1,0 +1,57 @@
+// Copyright (c) 2026 Changqing Zhang Technologies. All rights reserved.
+// SPDX-License-Identifier: AGPL-3.0-or-later
+
+package serein:adapter@1.0.0;
+
+/// Zero-Trust WASM Adapter interface for LLM API authentication isolation.
+///
+/// Decouples provider-specific authentication mechanisms (IAM signing,
+/// non-standard headers, token refresh) from the core TMR consensus engine.
+/// Each provider with a non-OpenAI-compatible auth scheme gets its own
+/// `.wasm` plugin implementing this contract, hot-swappable at runtime.
+interface api-adapter {
+    /// Canonical request from the TMR engine, normalized across all providers.
+    record standardized-request {
+        model: string,
+        prompt: string,
+        temperature: f32,
+        base-url: string,
+    }
+
+    /// HTTP request specification produced by the adapter for host-side execution.
+    ///
+    /// The host (Serein microkernel) performs the actual HTTP I/O using its own
+    /// reqwest client pool. The adapter only produces the spec — it never touches
+    /// the network directly. This enforces capability-based security: WASM plugins
+    /// cannot open sockets, only produce data for the host to act upon.
+    record http-request-spec {
+        url: string,
+        /// List of (header-name, header-value) pairs.
+        headers: list<tuple<string, string>>,
+        body: string,
+    }
+
+    /// Transform a canonical TMR request into a provider-specific HTTP request spec.
+    ///
+    /// The adapter receives the API key from the host (never stored in WASM memory
+    /// across invocations) and produces the complete HTTP request specification.
+    /// The host then executes the HTTP call and passes the raw response body to
+    /// `parse-response` for extraction.
+    transform-request: func(req: standardized-request, api-key: string) -> result<http-request-spec, string>;
+
+    /// Parse the raw HTTP response body into a canonical content string.
+    ///
+    /// Each provider returns a different JSON structure. The adapter normalizes
+    /// the response into a plain text content string that the TMR engine can
+    /// compare across providers for consensus arbitration.
+    parse-response: func(raw-body: string) -> result<string, string>;
+}
+
+/// Adapter world for provider-specific WASM plugins.
+///
+/// Each `.wasm` plugin implements this world. The host instantiates the
+/// component and calls `transform-request` / `parse-response` through
+/// the canonical ABI, isolating fragile auth logic from the core gateway.
+world adapter-world {
+    export api-adapter;
+}

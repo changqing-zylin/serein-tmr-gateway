@@ -1,0 +1,61 @@
+# ==============================================================================
+# SEREIN CORE - DYNAMIC LLM PROVIDER REGISTRY
+# ==============================================================================
+# Logic: TMR (Triple Modular Redundancy) Consensus Engine
+# Standards: OpenAI Compatibility Layer, ISO/IEC 27001 Compliance
+# ==============================================================================
+
+# ------------------------------------------------------------------------------
+# NODE A: APAC INTELLIGENCE (SOVEREIGN INFRASTRUCTURE)
+# ------------------------------------------------------------------------------
+# Moonshot (Kimi) replaces Groq for local stability and lower latency.
+[[provider]]
+id = "moonshot"
+display_name = "Moonshot-v1 (Kimi)"
+api_format = "openai"
+base_url = "https://api.moonshot.cn/v1"
+model = "moonshot-v1-8k"
+api_key_env = "MOONSHOT_API_KEY"
+timeout_ms = 15000
+max_response_bytes = 2097152
+cache_provider = "moonshot"
+temperature = 0.0
+max_tokens = 4096
+max_retries = 2
+concurrency_limit = 15
+
+# ------------------------------------------------------------------------------
+# NODE B: APAC EDGE (REGIONAL HIGH-PERFORMANCE)
+# ------------------------------------------------------------------------------
+[[provider]]
+id = "deepseek"
+display_name = "DeepSeek-Chat"
+api_format = "openai"
+base_url = "https://api.deepseek.com/v1"
+model = "deepseek-chat"
+api_key_env = "DEEPSEEK_API_KEY"
+timeout_ms = 15000
+max_response_bytes = 5242880
+cache_provider = "deepseek"
+temperature = 0.0
+max_tokens = 4096
+max_retries = 3
+concurrency_limit = 20
+
+# ------------------------------------------------------------------------------
+# NODE C: DOMESTIC INTELLIGENCE (SOVEREIGN INFRASTRUCTURE)
+# ------------------------------------------------------------------------------
+[[provider]]
+id = "zhipu"
+display_name = "Zhipu GLM-4"
+api_format = "openai"
+base_url = "https://open.bigmodel.cn/api/paas/v4"
+model = "glm-4"
+api_key_env = "ZHIPU_API_KEY"
+timeout_ms = 15000
+max_response_bytes = 2097152
+cache_provider = "zhipu"
+temperature = 0.0
+max_tokens = 4096
+max_retries = 2
+concurrency_limit = 15

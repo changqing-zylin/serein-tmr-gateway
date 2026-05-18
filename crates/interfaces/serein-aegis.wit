@@ -1,0 +1,34 @@
+// Copyright (c) 2026 Changqing Zhang Technologies. All rights reserved.
+// SPDX-License-Identifier: AGPL-3.0-or-later
+
+package serein:core@1.0.0;
+
+/// Active defense interface for asymmetric counterattack capabilities.
+/// Implements enterprise security compliant threat mitigation.
+interface active-defense {
+    /// Opaque resource representing an authenticated attacker context.
+    /// This resource provides the capability to execute defensive measures.
+    resource attacker-context {
+        /// Constructs a new attacker context for active defense operations.
+        /// Host invokes this to instantiate the guest-side resource handle
+        /// before triggering asymmetric countermeasures.
+        constructor();
+    }
+    
+    /// Triggers an asymmetric counterattack against the threat actor.
+    /// Executes computational throttling (SHA-256 strangulation) to consume
+    /// attacker resources without impacting system availability.
+    /// 
+    /// # Parameters
+    /// - `ctx`: Authenticated attacker context resource
+    /// 
+    /// # Returns
+    /// - `string`: Result message with execution metrics
+    trigger-asymmetric-counter: func(ctx: attacker-context) -> string;
+}
+
+/// Aegis world exports the active defense capability.
+/// This world is implemented by the serein-aegis Wasm component.
+world aegis-world {
+    export active-defense;
+}

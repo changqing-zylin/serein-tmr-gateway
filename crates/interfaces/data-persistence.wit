@@ -1,0 +1,66 @@
+// Copyright (c) 2026 Changqing Zhang Technologies. All rights reserved.
+// SPDX-License-Identifier: AGPL-3.0-or-later
+
+package serein:core@1.0.0;
+
+/// Data persistence interface for Zero-Trust storage operations.
+/// Implements enterprise security compliant data handling
+/// with sensitivity-based access control and encryption.
+interface data-persistence {
+    /// Data sensitivity classification levels for access control.
+    enum sensitivity {
+        public,
+        internal,
+        pii-masked,
+        pii-encrypted
+    }
+    
+    /// Data payload structure with sensitivity classification.
+    record data-payload {
+        key: string,
+        value: string,
+        level: sensitivity,
+    }
+
+    /// Host-side shared buffer resource for zero-copy data transfer.
+    ///
+    /// Provides a read-only memory view from the host to the Wasm guest
+    /// without copying large strings across the Component Model boundary.
+    /// The guest receives a resource handle and reads data via `read` calls,
+    /// avoiding per-request string allocation and serialization overhead.
+    resource shared-buffer {
+        /// Read a slice of the buffer at the given offset.
+        /// Returns the bytes read and the total buffer length.
+        read: func(offset: u64, len: u64) -> tuple<list<u8>, u64>;
+        
+        /// Total byte length of the shared buffer.
+        len: func() -> u64;
+    }
+    
+    /// Persist data with automatic sensitivity-based protection.
+    persist: func(payload: data-payload) -> tuple<bool, string, string>;
+
+    /// Persist data via a shared buffer handle (zero-copy path).
+    ///
+    /// The host allocates a shared buffer containing the serialized payload
+    /// and passes a resource handle instead of copying the string. The guest
+    /// reads the buffer contents through the `shared-buffer` resource interface.
+    persist-buffer: func(key: string, buffer: shared-buffer, level: sensitivity) -> tuple<bool, string, string>;
+    
+    /// Retrieve data with clearance-based access control.
+    retrieve: func(key: string, requester-clearance: sensitivity) -> tuple<option<data-payload>, bool>;
+    
+    /// Delete data with clearance-based authorization.
+    delete: func(key: string, requester-clearance: sensitivity) -> tuple<bool, bool>;
+    
+    /// Audit trail retrieval for compliance and forensics.
+    audit: func(key: string, auditor-clearance: sensitivity) -> tuple<list<string>, bool>;
+}
+
+/// Persist-record world for tenant Wasm components.
+world persist-record {
+    import data-persistence;
+    
+    /// Process payload through tenant business logic.
+    export process: func(payload: string) -> result<string, string>;
+}
