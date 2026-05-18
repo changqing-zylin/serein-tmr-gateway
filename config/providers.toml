@@ -43,19 +43,19 @@ max_retries = 3
 concurrency_limit = 20
 
 # ------------------------------------------------------------------------------
-# NODE C: DOMESTIC INTELLIGENCE (SOVEREIGN INFRASTRUCTURE)
+# NODE C: APAC EDGE (REGIONAL HIGH-PERFORMANCE)
 # ------------------------------------------------------------------------------
 [[provider]]
-id = "zhipu"
-display_name = "Zhipu GLM-4"
+id = "deepseek"
+display_name = "DeepSeek-Chat"
 api_format = "openai"
-base_url = "https://open.bigmodel.cn/api/paas/v4"
-model = "glm-4"
-api_key_env = "ZHIPU_API_KEY"
+base_url = "https://api.deepseek.com/v1"
+model = "deepseek-chat"
+api_key_env = "DEEPSEEK_API_KEY"
 timeout_ms = 15000
-max_response_bytes = 2097152
-cache_provider = "zhipu"
+max_response_bytes = 5242880
+cache_provider = "deepseek"
 temperature = 0.0
 max_tokens = 4096
-max_retries = 2
-concurrency_limit = 15
+max_retries = 3
+concurrency_limit = 20
