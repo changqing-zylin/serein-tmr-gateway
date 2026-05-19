@@ -37,6 +37,11 @@ graph TD
     Comparator -->|Consensus Reached| Proof[Web3 Proof Logger: TxHash]
     
     Proof -->|Execute| Target[(Mantle Ledger / DePIN)]
+```
+
+---
+
+### TMR (Triple Modular Redundancy) Engine
 
 ### TMR (Triple Modular Redundancy) Engine
 
@@ -61,37 +66,6 @@ Every consensus result is hashed (BLAKE3) and logged with a cryptographic proof 
 - Timestamp and session nonce
 
 These proofs can be submitted on-chain via the `[WEB3_PROOF]` log stream, enabling smart contracts to verify that AI inputs passed through Serein's TMR pipeline without trusting any single provider.
-
----
-
-## Architecture Diagram
-
-```mermaid
-flowchart LR
-    A[("User / Smart Contract")]
-    B["Wasmtime Sandbox\n(WASI 0.3 Isolation)"]
-    C["TMR Engine\n(Consensus Coordinator)"]
-    D1["Provider A\n(GPT-4)"]
-    D2["Provider B\n(Claude)"]
-    D3["Provider C\n(Gemini)"]
-    E["Proof Logger\n(BLAKE3 Hash)"]
-    F[("On-Chain Verifier")]
-    G["Response"]
-
-    A -->|"Request"| B
-    B -->|"Sanitized Prompt"| C
-    C -->|"Fan-out"| D1
-    C -->|"Fan-out"| D2
-    C -->|"Fan-out"| D3
-    D1 -->|"Response A"| C
-    D2 -->|"Response B"| C
-    D3 -->|"Response C"| C
-    C -->|"2-of-3 Consensus"| E
-    E -->|"[WEB3_PROOF]"| F
-    C -->|"Verified Result"| G
-    G --> B
-    B --> A
-```
 
 ---
 
