@@ -43,8 +43,6 @@ graph TD
 
 ### TMR (Triple Modular Redundancy) Engine
 
-### TMR (Triple Modular Redundancy) Engine
-
 Inspired by aerospace-grade fault-tolerant computing, Serein's TMR Engine queries **three independent LLM providers simultaneously** for every request. A deterministic consensus algorithm compares responses, requiring at least 2-of-3 agreement before forwarding the result. This eliminates single-model hallucination and ensures Byzantine fault tolerance at the AI layer.
 
 ### Wasmtime Memory Sandbox
