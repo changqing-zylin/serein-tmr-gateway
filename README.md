@@ -19,28 +19,24 @@ Smart contracts and DePIN (Decentralized Physical Infrastructure) networks deman
 
 ## The Serein Architecture
 
+```mermaid
 graph TD
-    classDef core fill:#2c3e50,stroke:#34495e,stroke-width:2px,color:#fff;
-    classDef node fill:#2980b9,stroke:#2980b9,stroke-width:2px,color:#fff;
-    classDef secure fill:#27ae60,stroke:#2ecc71,stroke-width:2px,color:#fff;
-    classDef danger fill:#c0392b,stroke:#e74c3c,stroke-width:2px,color:#fff;
-
-    User([Web3 dApp / Smart Contract]) -->|Intent & Request| Gateway[Serein Gateway<br/>WASM Secure Sandbox]:::core
+    User([Web3 dApp / Smart Contract]) -->|Intent| Gateway[Serein Gateway WASM Sandbox]
     
-    subgraph TMR Consensus Engine [TMR Consensus Engine]
-        Gateway -->|Concurrency Routing| NodeA[Node A: Moonshot]:::node
-        Gateway -->|Concurrency Routing| NodeB[Node B: DeepSeek Primary]:::node
-        Gateway -->|Concurrency Routing| NodeC[Node C: DeepSeek Fallback]:::node
+    subgraph TMR Consensus Engine
+        Gateway -->|Route| NodeA[Node A: Moonshot]
+        Gateway -->|Route| NodeB[Node B: DeepSeek Primary]
+        Gateway -->|Route| NodeC[Node C: DeepSeek Fallback]
         
-        NodeA -->|Response| Comparator{BFT Voting<br/>2/3 Majority}:::core
+        NodeA -->|Response| Comparator{BFT Voting 2/3 Majority}
         NodeB -->|Response| Comparator
         NodeC -->|Response| Comparator
     end
     
-    Comparator -->|Consensus Failed / Diverged| Block[Aegis Guard<br/>Block Transcation & Refund]:::danger
-    Comparator -->|Consensus Reached| Proof[Web3 Proof Logger<br/>Generate TxHash]:::secure
+    Comparator -->|Consensus Failed| Block[Aegis Guard: Block & Refund]
+    Comparator -->|Consensus Reached| Proof[Web3 Proof Logger: TxHash]
     
-    Proof -->|Execute & Audit| Target[(Mantle Ledger / DePIN)]
+    Proof -->|Execute| Target[(Mantle Ledger / DePIN)]
 
 ### TMR (Triple Modular Redundancy) Engine
 
