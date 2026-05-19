@@ -19,6 +19,29 @@ Smart contracts and DePIN (Decentralized Physical Infrastructure) networks deman
 
 ## The Serein Architecture
 
+graph TD
+    classDef core fill:#2c3e50,stroke:#34495e,stroke-width:2px,color:#fff;
+    classDef node fill:#2980b9,stroke:#2980b9,stroke-width:2px,color:#fff;
+    classDef secure fill:#27ae60,stroke:#2ecc71,stroke-width:2px,color:#fff;
+    classDef danger fill:#c0392b,stroke:#e74c3c,stroke-width:2px,color:#fff;
+
+    User([Web3 dApp / Smart Contract]) -->|Intent & Request| Gateway[Serein Gateway<br/>WASM Secure Sandbox]:::core
+    
+    subgraph TMR Consensus Engine [TMR Consensus Engine]
+        Gateway -->|Concurrency Routing| NodeA[Node A: Moonshot]:::node
+        Gateway -->|Concurrency Routing| NodeB[Node B: DeepSeek Primary]:::node
+        Gateway -->|Concurrency Routing| NodeC[Node C: DeepSeek Fallback]:::node
+        
+        NodeA -->|Response| Comparator{BFT Voting<br/>2/3 Majority}:::core
+        NodeB -->|Response| Comparator
+        NodeC -->|Response| Comparator
+    end
+    
+    Comparator -->|Consensus Failed / Diverged| Block[Aegis Guard<br/>Block Transcation & Refund]:::danger
+    Comparator -->|Consensus Reached| Proof[Web3 Proof Logger<br/>Generate TxHash]:::secure
+    
+    Proof -->|Execute & Audit| Target[(Mantle Ledger / DePIN)]
+
 ### TMR (Triple Modular Redundancy) Engine
 
 Inspired by aerospace-grade fault-tolerant computing, Serein's TMR Engine queries **three independent LLM providers simultaneously** for every request. A deterministic consensus algorithm compares responses, requiring at least 2-of-3 agreement before forwarding the result. This eliminates single-model hallucination and ensures Byzantine fault tolerance at the AI layer.
