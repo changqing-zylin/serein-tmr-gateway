@@ -1,0 +1,21 @@
+# Copyright (c) 2026 Changqing Zhang. All rights reserved.
+# SPDX-License-Identifier: AGPL-3.0-or-later
+
+[package]
+name = "serein-telemetry"
+version = "0.1.0"
+edition = "2021"
+description = "Serein Telemetry - Component Shadowing and Deception"
+license = "AGPL-3.0-or-later"
+readme = "README.md"
+
+# Dependencies from workspace
+[dependencies]
+anyhow = { workspace = true }
+thiserror = { workspace = true }
+tracing = { workspace = true }
+serde = { workspace = true, features = ["derive"] }
+once_cell = "1.19"
+
+[dev-dependencies]
+tokio-test = "0.4"
