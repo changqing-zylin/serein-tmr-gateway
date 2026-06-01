@@ -1,0 +1,5 @@
+$package = "serein:aegis"
+$name = "serein-aegis"
+
+[dependencies]
+"serein:core/serein-aegis@1.0.0" = { path = "../interfaces/serein-aegis.wit" }

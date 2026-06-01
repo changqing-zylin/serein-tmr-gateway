@@ -1,0 +1,37 @@
+# Copyright (c) 2026 Changqing Zhang. All rights reserved.
+# SPDX-License-Identifier: AGPL-3.0-or-later
+
+[package]
+name = "serein-sandbox-guard"
+version = "0.1.0"
+edition = "2021"
+
+[dependencies]
+anyhow = { workspace = true }
+thiserror = { workspace = true }
+serde = { workspace = true }
+serde_json = { workspace = true }
+wit-bindgen = { workspace = true }
+hex = "0.4.3"
+tracing = { workspace = true }
+regex = "1.10"
+aho-corasick = "1.1"
+ed25519-dalek = { version = "2.1", features = ["default", "std", "rand_core"] }
+rand = "0.8.5"
+fastrand = "2.3"
+dashmap = "6.1.0"
+moka = { version = "0.12", features = ["sync"] }
+wasmtime = { workspace = true, optional = true }
+
+[features]
+default = []
+host-engine = ["wasmtime"]
+
+[dev-dependencies]
+rand = "0.8.5"
+
+[lib]
+crate-type = ["rlib"]
+
+[package.metadata.component]
+package = "serein:aegis"
