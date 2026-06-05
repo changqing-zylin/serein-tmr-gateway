@@ -1,0 +1,27 @@
+# Copyright (c) 2026 Changqing Zhang. All rights reserved.
+# SPDX-License-Identifier: AGPL-3.0-or-later
+
+[package]
+name = "serein-consensus"
+version = "0.1.0"
+edition = "2021"
+description = "Serein Consensus - P2P Threat Intelligence & TMR Consensus"
+license = "AGPL-3.0-or-later"
+readme = "README.md"
+
+[dependencies]
+anyhow = { workspace = true }
+thiserror = { workspace = true }
+tracing = { workspace = true }
+serde = { workspace = true, features = ["derive"] }
+serde_json = "1.0"
+tokio = { version = "1.0", features = ["full"] }
+futures = "0.3"
+rand = "0.8"
+blake3 = { workspace = true }
+rayon = { workspace = true }
+sha2 = "0.10"
+hex = "0.4.3"
+
+[dev-dependencies]
+tokio-test = "0.4"
