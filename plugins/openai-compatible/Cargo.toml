@@ -1,0 +1,30 @@
+# Copyright (c) 2026 Changqing Zhang. All rights reserved.
+# SPDX-License-Identifier: AGPL-3.0-or-later
+
+[package]
+name = "openai-compatible"
+version = "0.1.0"
+edition = "2021"
+description = "OpenAI-Compatible WASM Adapter - canonical request/response translation for standard Bearer-token APIs"
+license = "AGPL-3.0-or-later"
+
+[lib]
+crate-type = ["cdylib"]
+name = "openai_compatible"
+
+[dependencies]
+serde = { workspace = true, features = ["derive"] }
+serde_json = "1.0"
+wit-bindgen = { workspace = true }
+
+[build-dependencies]
+wit-bindgen = { workspace = true }
+
+[package.metadata.component]
+package = "serein:openai-compatible"
+
+[package.metadata.component.target]
+path = "../../crates/interfaces/serein-adapter.wit"
+
+[package.metadata.wit]
+imports = ["../../crates/interfaces/serein-adapter.wit"]

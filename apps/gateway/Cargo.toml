@@ -1,0 +1,39 @@
+# Copyright (c) 2026 Changqing Zhang. All rights reserved.
+# SPDX-License-Identifier: AGPL-3.0-or-later
+
+[package]
+name = "serein-gateway"
+version = "0.1.0"
+edition = "2021"
+
+[dependencies]
+axum = "0.7"
+tokio = { version = "1", features = ["full"] }
+serde = "1.0"
+serde_json = { version = "1.0", features = ["preserve_order"] }
+tracing = "0.1"
+tracing-subscriber = { version = "0.3", features = ["env-filter", "json"] }
+serein-core = { path = "../../crates/core" }
+anyhow = "1.0"
+tower = { version = "0.5", features = ["limit"] }
+tower-http = { version = "0.5", features = ["cors", "trace", "request-id", "timeout", "propagate-header"] }
+reqwest = { version = "0.12", features = ["json", "hickory-dns", "rustls-tls"], default-features = false }
+tracing-appender = "0.2"
+dotenvy = "0.15"
+serein-sandbox-guard = { path = "../../crates/sandbox-guard" }
+serein-llm-router = { path = "../../crates/llm-router" }
+serein-cache-storage = { path = "../../crates/cache-storage" }
+serein-traffic-control = { path = "../../crates/traffic-control" }
+serein-interfaces = { path = "../../crates/interfaces" }
+chrono = { version = "0.4", features = ["serde"] }
+tikv-jemallocator = { version = "0.5", optional = true }
+mimalloc = "0.1"
+ipnet = "2.9"
+serein-worker = { path = "../../crates/worker" }
+rayon = { workspace = true }
+arc-swap = "1"
+redis = { version = "0.25", features = ["tokio-comp", "connection-manager"] }
+
+[features]
+default = []
+jemalloc = ["dep:tikv-jemallocator"]
